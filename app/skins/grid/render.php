@@ -131,7 +131,7 @@ if($this->style == 'colorful')
                 <?php endif; ?>
                 <h4 class="mec-event-title sm-event-title"><a class="mec-color-hover" data-event-id="<?php echo $event->data->ID; ?>" href="<?php echo $this->main->get_event_date_permalink($event->data->permalink, $event->date['start']['date']); ?>"><?php echo $event->data->title; ?></a><?php echo $event_color; ?></h4>
                 <?php if ( !empty($label_style) ) echo '<span class="mec-fc-style">'.$label_style.'</span>'; ?>
-				<p><?php echo $event->data->post->post_content ?></p>
+				<span class="sm-event-post-content"><?php echo $event->data->post->post_content ?></span>
             </div>
             <div class="mec-event-footer sm-event-footer">
                 <ul class="mec-event-sharing-wrap sm-event-sharing-wrap">
