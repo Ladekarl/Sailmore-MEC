@@ -14,7 +14,7 @@ if($this->style == 'colorful')
 	$this->style = 'modern';
 	$colorful_class = ' mec-event-grid-colorful';
 }
-  
+
 ?>
 <div class="mec-wrap <?php echo $event_colorskin . $colorful_class; ?>">
     <div class="mec-event-grid-<?php echo $this->style; ?>">
@@ -30,7 +30,7 @@ if($this->style == 'colorful')
 
         echo ($rcount == 1) ? '<div class="row">' : '';
         echo '<div class="col-md-'.$col.' col-sm-'.$col.'">';
-        
+
         $location = isset($event->data->locations[$event->data->meta['mec_location_id']])? $event->data->locations[$event->data->meta['mec_location_id']] : array();
         $organizer = isset($event->data->organizers[$event->data->meta['mec_organizer_id']])? $event->data->organizers[$event->data->meta['mec_organizer_id']] : array();
         $event_color = isset($event->data->meta['mec_color']) ? '<span class="event-color" style="background: #'.$event->data->meta['mec_color'].'"></span>' : '';
@@ -47,7 +47,7 @@ if($this->style == 'colorful')
             if ( $label['style']  == 'mec-label-featured' )
             {
                 $label_style = esc_html__( 'Featured' , 'mec' );
-            } 
+            }
             elseif ( $label['style']  == 'mec-label-canceled' )
             {
                 $label_style = esc_html__( 'Canceled' , 'mec' );
@@ -89,11 +89,49 @@ if($this->style == 'colorful')
                 <?php if(isset($settings['multiple_day_show_method']) && $settings['multiple_day_show_method'] == 'all_days') : ?>
                     <div class="mec-event-date mec-bg-color"><?php echo date_i18n($this->date_format_classic_1, strtotime($event->date['start']['date'])); ?></div>
                 <?php else: ?>
-                    <div class="mec-event-date mec-bg-color"><?php echo $this->main->date_label($event->date['start'], $event->date['end'], $this->date_format_classic_1); ?></div>
+                    <div class="mec-event-date mec-bg-color">
+						<div class="sm-event-date">
+							<div class="sm-event-date-top">
+								<span class="sm-event-date-num">
+									<?php echo date_i18n($this->date_format_clean_1, strtotime($event->date['start']['date'])); ?>
+								</span>
+								<span class="sm-event-date-month">
+									<?php echo date_i18n($this->date_format_clean_2, strtotime($event->date['start']['date'])); ?>
+								</span>
+								-
+								<span class="sm-event-date-num">
+									<?php echo date_i18n($this->date_format_clean_1, strtotime($event->date['end']['date'])); ?>
+								</span>
+								<span class="sm-event-date-month">
+									<?php echo date_i18n($this->date_format_clean_2, strtotime($event->date['end']['date'])); ?>
+								</span>
+							</div>
+							<div class="sm-event-time">
+								<?php if($allday == '0' and isset($event->data->time) and trim($event->data->time['start'])): ?>
+									<dd><abbr class="mec-events-abbr"><?php echo $event->data->time['start']; ?><?php echo (trim($event->data->time['end']) ? ' - '.$event->data->time['end'] : ''); ?></abbr></dd>
+								<?php else: ?>
+									<dd><abbr class="mec-events-abbr"><?php _e('All of the day', 'mec'); ?></abbr></dd>
+								<?php endif; ?>
+							</div>
+						</div>
+	                    <?php if(isset($location['name'])): ?>
+						<div class="sm-event-loc">
+							<i class="mec-sl-location-pin sm-location-pin"></i>
+							<div class="sm-loc-text">
+								<div class="sm-loc-header">
+									<?php echo trim(isset($location['name']) ? $location['name'] : '')?>
+								</div>
+								<div class="sm-loc-body">
+									<?php echo trim((isset($location['address']) ? $location['address'] : ''), ', '); ?>
+								</div>
+							</div>
+						</div>
+	                    <?php endif; ?>
+					</div>
                 <?php endif; ?>
                 <h4 class="mec-event-title"><a class="mec-color-hover" data-event-id="<?php echo $event->data->ID; ?>" href="<?php echo $this->main->get_event_date_permalink($event->data->permalink, $event->date['start']['date']); ?>"><?php echo $event->data->title; ?></a><?php echo $event_color; ?></h4>
                 <?php if ( !empty($label_style) ) echo '<span class="mec-fc-style">'.$label_style.'</span>'; ?>
-                <p><?php echo trim((isset($location['name']) ? $location['name'] : '').', '.(isset($location['address']) ? $location['address'] : ''), ', '); ?></p>
+                <?php echo $event->data->content ?>
             </div>
             <div class="mec-event-footer">
                 <ul class="mec-event-sharing-wrap">
@@ -160,7 +198,7 @@ if($this->style == 'colorful')
                     if( isset($location['address'] ) ) {
                     ?>
                         <div class="mec-event-address"><?php echo $location['address']; ?></div>
-                    <?php 
+                    <?php
                     }
                     ?>
                     <div class="mec-event-footer mec-color">
