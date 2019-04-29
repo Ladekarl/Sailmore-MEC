@@ -106,13 +106,6 @@ if($this->style == 'colorful')
 									<?php echo date_i18n($this->date_format_clean_2, strtotime($event->date['end']['date'])); ?>
 								</span>
 							</div>
-							<div class="sm-event-time">
-								<?php if($allday == '0' and isset($event->data->time) and trim($event->data->time['start'])): ?>
-									<dd><abbr class="mec-events-abbr"><?php echo $event->data->time['start']; ?><?php echo (trim($event->data->time['end']) ? ' - '.$event->data->time['end'] : ''); ?></abbr></dd>
-								<?php else: ?>
-									<dd><abbr class="mec-events-abbr"><?php _e('All of the day', 'mec'); ?></abbr></dd>
-								<?php endif; ?>
-							</div>
 						</div>
 	                    <?php if(isset($location['name'])): ?>
 						<div class="sm-event-loc">
