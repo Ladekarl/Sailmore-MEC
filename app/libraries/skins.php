@@ -650,18 +650,25 @@ class MEC_skins extends MEC_base
         $fields = $end_div = '';
         $first_row = 'not-started';
 
-        foreach($this->sf_options as $field=>$options)
+	    $sortedOptions = array(
+		    'month_filter' => $this->sf_options['month_filter'],
+		    'location' => $this->sf_options['location'],
+		    'label' => $this->sf_options['label'],
+	    	'category' => $this->sf_options['category']
+	    );
+
+        foreach($sortedOptions as $field=>$options)
         {
             $type = isset($options['type']) ? $options['type'] : '';
             
-            if(in_array($field, array('category', 'location', 'organizer', 'label')) and $first_row == 'not-started')
+            if(in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter')) and $first_row == 'not-started')
             {
                 $first_row = 'started';
                 $fields .= '<div class="mec-dropdown-wrap">';
                 $end_div = '</div>';
             }
             
-            if(!in_array($field, array('category', 'location', 'organizer', 'label')) and $first_row == 'started')
+            if(!in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter')) and $first_row == 'started')
             {
                 $first_row = 'finished';
                 $fields .= '</div>';
@@ -850,7 +857,7 @@ class MEC_skins extends MEC_base
                 </div>';
             }
         }
-        
+
         return $output;
     }
     
