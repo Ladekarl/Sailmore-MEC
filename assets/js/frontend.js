@@ -43,6 +43,10 @@ var mecSingleEventDisplayer = {
         {
             search();
         });
+        $("#mec_sf_tag_"+settings.id).on('change', function(e)
+        {
+            search();
+        });
         
         $("#mec_sf_location_"+settings.id).on('change', function(e)
         {
@@ -81,6 +85,7 @@ var mecSingleEventDisplayer = {
         {
             var s = $("#mec_sf_s_"+settings.id).length ? $("#mec_sf_s_"+settings.id).val() : '';
             var category = $("#mec_sf_category_"+settings.id).length ? $("#mec_sf_category_"+settings.id).val() : '';
+            var tag = $("#mec_sf_tag_"+settings.id).length ? $("#mec_sf_tag_"+settings.id).val() : '';
             var location = $("#mec_sf_location_"+settings.id).length ? $("#mec_sf_location_"+settings.id).val() : '';
             var organizer = $("#mec_sf_organizer_"+settings.id).length ? $("#mec_sf_organizer_"+settings.id).val() : '';
             var label = $("#mec_sf_label_"+settings.id).length ? $("#mec_sf_label_"+settings.id).val() : '';
@@ -97,7 +102,7 @@ var mecSingleEventDisplayer = {
                 year = '';
             }
             
-            var atts = settings.atts+'&sf[s]='+s+'&sf[month]='+month+'&sf[year]='+year+'&sf[category]='+category+'&sf[location]='+location+'&sf[organizer]='+organizer+'&sf[label]='+label;
+            var atts = settings.atts+'&sf[s]='+s+'&sf[month]='+month+'&sf[year]='+year+'&sf[category]='+category+'&sf[tag]='+tag+'&sf[location]='+location+'&sf[organizer]='+organizer+'&sf[label]='+label;
             settings.callback(atts);
         }
     };

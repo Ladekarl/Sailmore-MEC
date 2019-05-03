@@ -13,40 +13,40 @@ class MEC_skins extends MEC_base
      * @var string
      */
     public $skin = 'list';
-    
+
     /**
      * @var array
      */
     public $atts = array();
-    
+
     /**
      * @var array
      */
     public $args = array();
-    
+
     /**
      * @var int
      */
     public $maximum_dates = 6;
-    
+
     /**
      * Maximum days for loop
      * @var int
      */
     public $max_days_loop = 366;
-    
+
 	/**
      * Offset for don't load duplicated events in list/grid views on load more action
      * @var int
      */
 	public $offset = 0;
-	
+
 	/**
      * Offset for next load more action
      * @var int
      */
 	public $next_offset = 0;
-	
+
     /**
      * Single Event Display Method
      * @var string
@@ -104,32 +104,32 @@ class MEC_skins extends MEC_base
     {
         // MEC factory library
         $this->factory = $this->getFactory();
-        
+
         // MEC main library
         $this->main = $this->getMain();
-        
+
         // MEC file library
         $this->file = $this->getFile();
-        
+
         // MEC db library
         $this->db = $this->getDB();
-        
+
         // MEC render library
         $this->render = $this->getRender();
-        
+
         // MEC request library
         $this->request = $this->getRequest();
-        
+
         // Found Events
         $this->found = 0;
-        
+
         // How to show multiple days events
         $this->multiple_days_method = $this->main->get_multiple_days_method();
-        
+
         // Hide event on start or on end
         $this->hide_time_method = $this->main->get_hide_time_method();
     }
-    
+
     /**
      * Registers skin actions into WordPress hooks
      * @author Webnus <info@webnus.biz>
@@ -137,7 +137,7 @@ class MEC_skins extends MEC_base
     public function actions()
     {
     }
-    
+
     /**
      * Loads all skins
      * @author Webnus <info@webnus.biz>
@@ -147,7 +147,7 @@ class MEC_skins extends MEC_base
         // MEC add filters
         $this->factory->filter('posts_join', array($this, 'join'), 10, 2);
         $this->factory->filter('posts_where', array($this, 'where'), 10, 2);
-        
+
         $skins = $this->main->get_skins();
         foreach($skins as $skin=>$skin_name)
         {
@@ -167,15 +167,15 @@ class MEC_skins extends MEC_base
             // init the actions
             $SKO->actions();
         }
-        
+
         // Init Single Skin
         include_once MEC::import('app.skins.single', true, true);
-        
+
         // Register the actions
         $SKO = new MEC_skin_single();
         $SKO->actions();
     }
-    
+
     /**
      * Get path of one skin file
      * @author Webnus <info@webnus.biz>
@@ -186,7 +186,7 @@ class MEC_skins extends MEC_base
     {
         return MEC::import('app.skins.'.$this->skin.'.'.$file, true, true);
     }
-    
+
     /**
      * Returns path of skin tpl
      * @author Webnus <info@webnus.biz>
@@ -195,14 +195,14 @@ class MEC_skins extends MEC_base
     public function get_tpl_path()
     {
         $path = $this->get_path('tpl');
-        
+
         // Apply filters
         $filtered_path = apply_filters('mec_get_skin_tpl_path', $this->skin);
         if($filtered_path != $this->skin and $this->file->exists($filtered_path)) $path = $filtered_path;
-        
+
         return $path;
     }
-    
+
     /**
      * Returns path of skin render file
      * @author Webnus <info@webnus.biz>
@@ -211,14 +211,14 @@ class MEC_skins extends MEC_base
     public function get_render_path()
     {
         $path = $this->get_path('render');
-        
+
         // Apply filters
         $filtered_path = apply_filters('mec_get_skin_render_path', $this->skin);
         if($filtered_path != $this->skin and $this->file->exists($filtered_path)) $path = $filtered_path;
-        
+
         return $path;
     }
-    
+
     /**
      * Returns calendar file path of calendar views
      * @author Webnus <info@webnus.biz>
@@ -228,14 +228,14 @@ class MEC_skins extends MEC_base
     public function get_calendar_path($style = 'calendar')
     {
         $path = $this->get_path($style);
-        
+
         // Apply filters
         $filtered_path = apply_filters('mec_get_skin_calendar_path', $this->skin);
         if($filtered_path != $this->skin and $this->file->exists($filtered_path)) $path = $filtered_path;
-        
+
         return $path;
     }
-    
+
     /**
      * Generates skin output
      * @author Webnus <info@webnus.biz>
@@ -250,12 +250,12 @@ class MEC_skins extends MEC_base
 
         // Include needed assets for loading single event details page
         if($this->sed_method) $this->main->load_sed_assets();
-        
+
         ob_start();
         include $this->get_tpl_path();
         return ob_get_clean();
     }
-    
+
     /**
      * Returns keyword query for adding to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -267,7 +267,7 @@ class MEC_skins extends MEC_base
         if(isset($this->atts['s']) and trim($this->atts['s']) != '') return $this->atts['s'];
         else return NULL;
     }
-    
+
     /**
      * Returns taxonomy query for adding to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -276,7 +276,7 @@ class MEC_skins extends MEC_base
     public function tax_query()
     {
         $tax_query = array('relation'=>'AND');
-        
+
         // Add event label to filter
         if(isset($this->atts['label']) and trim($this->atts['label'], ', ') != '')
         {
@@ -286,7 +286,7 @@ class MEC_skins extends MEC_base
                 'terms'=>explode(',', trim($this->atts['label'], ', '))
             );
         }
-        
+
         // Add event category to filter
         if(isset($this->atts['category']) and trim($this->atts['category'], ', ') != '')
         {
@@ -296,7 +296,7 @@ class MEC_skins extends MEC_base
                 'terms'=>explode(',', trim($this->atts['category'], ', '))
             );
         }
-        
+
         // Add event location to filter
         if(isset($this->atts['location']) and trim($this->atts['location'], ', ') != '')
         {
@@ -306,7 +306,7 @@ class MEC_skins extends MEC_base
                 'terms'=>explode(',', trim($this->atts['location'], ', '))
             );
         }
-        
+
         // Add event organizer to filter
         if(isset($this->atts['organizer']) and trim($this->atts['organizer'], ', ') != '')
         {
@@ -316,10 +316,10 @@ class MEC_skins extends MEC_base
                 'terms'=>explode(',', trim($this->atts['organizer'], ', '))
             );
         }
-        
+
         return $tax_query;
     }
-    
+
     /**
      * Returns meta query for adding to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -329,10 +329,10 @@ class MEC_skins extends MEC_base
     {
         $meta_query = array();
         $meta_query['relation'] = 'AND';
-        
+
         return $meta_query;
     }
-    
+
     /**
      * Returns tag query for adding to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -341,16 +341,16 @@ class MEC_skins extends MEC_base
     public function tag_query()
     {
         $tag = '';
-        
+
         // Add event tags to filter
         if(isset($this->atts['tag']) and trim($this->atts['tag'], ', ') != '')
         {
             $tag = $this->atts['tag'];
         }
-        
+
         return $tag;
     }
-    
+
     /**
      * Returns author query for adding to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -359,16 +359,16 @@ class MEC_skins extends MEC_base
     public function author_query()
     {
         $author = '';
-        
+
         // Add event authors to filter
         if(isset($this->atts['author']) and trim($this->atts['author'], ', ') != '')
         {
             $author = $this->atts['author'];
         }
-        
+
         return $author;
     }
-    
+
     /**
      * Set the current day for filtering events in WP_Query
      * @author Webnus <info@webnus.biz>
@@ -378,18 +378,18 @@ class MEC_skins extends MEC_base
     public function setToday($today = NULL)
     {
         if(is_null($today)) $today = date('Y-m-d');
-        
+
         $this->args['mec-today'] = $today;
         $this->args['mec-now'] = strtotime($this->args['mec-today']);
-        
+
         $this->args['mec-year'] = date('Y', $this->args['mec-now']);
         $this->args['mec-month'] = date('m', $this->args['mec-now']);
         $this->args['mec-day'] = date('d', $this->args['mec-now']);
-        
+
         $this->args['mec-week'] = (int) ((date('d', $this->args['mec-now']) - 1) / 7) + 1;
         $this->args['mec-weekday'] = date('N', $this->args['mec-now']);
     }
-    
+
     /**
      * Join MEC table with WP_Query for filtering the events
      * @author Webnus <info@webnus.biz>
@@ -406,7 +406,7 @@ class MEC_skins extends MEC_base
 
         return $join;
     }
-    
+
     /**
      * Adding MEC filter query to WP_Query
      * @author Webnus <info@webnus.biz>
@@ -421,36 +421,36 @@ class MEC_skins extends MEC_base
         {
             // Start and End date
             $date_query = "`start`<='".$wp_query->get('mec-today')."' AND (`end`='0000-00-00' OR `end`>='".$wp_query->get('mec-today')."')";
-            
+
             // No recuring events
             if($this->multiple_days_method == 'first_day' or ($this->multiple_days_method == 'first_day_listgrid' and in_array($wp_query->get('mec-skin', ''), array('list', 'grid', 'slider', 'carousel')))) $rec_no = "`repeat`='0' AND `start`='".$wp_query->get('mec-today')."' AND (`end`='0000-00-00' OR `end`>='".$wp_query->get('mec-today')."')";
             else $rec_no = "`repeat`='0' AND ".$date_query;
-            
+
             // Normal Recuring events
             $rec_normal = "`repeat`='1' AND DATEDIFF('".$wp_query->get('mec-today')."', start) % rinterval=0 AND ".$date_query;
-            
+
             // Complex Recuring events
             $rec_complex = "`repeat`='1' AND (`year`='".$wp_query->get('mec-year')."' OR `year`='*') AND
                     (`month` LIKE '%,".$wp_query->get('mec-month').",%' OR `month`='*') AND
                     (`day` LIKE '".(($this->multiple_days_method == 'all_days' or ($this->multiple_days_method == 'first_day_listgrid' and !in_array($wp_query->get('mec-skin', ''), array('list', 'grid', 'slider', 'carousel')))) ? '%' : '').",".$wp_query->get('mec-day').",%' OR `day`='*') AND
                     (`week` LIKE '%,".$wp_query->get('mec-week').",%' OR `week`='*') AND
                     (`weekday` LIKE '%,".$wp_query->get('mec-weekday').",%' OR `weekday`='*') AND ".$date_query;
-            
+
             // Weekday Recuring events
             $rec_weekdays = "`repeat`='1' AND `weekdays` LIKE '%,".$wp_query->get('mec-weekday').",%' AND ".$date_query;
-            
+
             // Main Date of Days (In)
             $rec_days_in_main_date = "`repeat`='1' AND `days`!='' AND ".$date_query;
-            
+
             // Days (In)
             $rec_days_in = "`days` LIKE '%".$wp_query->get('mec-today')."%'";
-            
+
             // Days (Not In)
             $rec_days_not_in = "`not_in_days` NOT LIKE '%".$wp_query->get('mec-today')."%'";
-            
+
             // Hide past events
             $time_query = '';
-            
+
             // Show only ongoing events
             if($wp_query->get('mec-show-ongoing-events', false))
             {
@@ -458,7 +458,7 @@ class MEC_skins extends MEC_base
                 $minute = current_time('i');
 
                 $seconds = $this->main->time_to_seconds($hour, $minute);
-                
+
                 // Add time to the query
                 $time_query = "(`time_start`!='0' AND `time_start`<='".($seconds)."') AND (`time_end`!='0' AND `time_end`>='".($seconds)."')";
 
@@ -469,7 +469,7 @@ class MEC_skins extends MEC_base
             elseif($wp_query->get('mec-seconds') and $wp_query->get('mec-today') == $wp_query->get('mec-seconds-date'))
             {
                 $seconds = $wp_query->get('mec-seconds');
-                
+
                 // Add time to the query
                 if($this->hide_time_method == 'start') $time_query = "`time_start`!='0' AND `time_start`>='$seconds'";
                 elseif($this->hide_time_method == 'plus1') $time_query = "`time_start`!='0' AND `time_start`>='".($seconds-3600)."' AND `time_end`!='0' AND `time_end`>='".($seconds)."'";
@@ -481,22 +481,22 @@ class MEC_skins extends MEC_base
             {
                 $hour = current_time('G');
                 $minute = current_time('i');
-                
+
                 $seconds = $this->main->time_to_seconds($hour, $minute);
-                
+
                 // Add time to the query
                 if($this->hide_time_method == 'start') $time_query = "`time_start`!='0' AND `time_start`>='$seconds'";
                 elseif($this->hide_time_method == 'plus1') $time_query = "`time_start`!='0' AND `time_start`>='".($seconds-3600)."' AND `time_end`!='0' AND `time_end`>='".($seconds)."'";
                 elseif($this->hide_time_method == 'plus2') $time_query = "`time_start`!='0' AND `time_start`>='".($seconds-7200)."' AND `time_end`!='0' AND `time_end`>='".($seconds)."'";
                 else $time_query = "`time_end`!='0' AND `time_end`>='".($seconds)."'";
             }
-            
+
             $where .= $this->db->_prefix(" AND (($rec_no) OR ($rec_normal) OR ($rec_complex) OR ($rec_weekdays) OR ($rec_days_in) OR ($rec_days_in_main_date)) AND $rec_days_not_in".(trim($time_query) ? ' AND '.$time_query : ''));
         }
 
         return $where;
     }
-    
+
     /**
      * Perform the search
      * @author Webnus <info@webnus.biz>
@@ -514,77 +514,76 @@ class MEC_skins extends MEC_base
             else $today = date('Y-m-d', strtotime('+'.$i.' Days', strtotime($this->start_date)));
 
             $this->setToday($today);
-            
+
             // Check Finish Date
             if(isset($this->maximum_date) and strtotime($today) > strtotime($this->maximum_date)) break;
-            
+
             // Extending the end date
             $this->end_date = $today;
-            
+
             // Limit
             $this->args['posts_per_page'] = 1000;
-			
+
 			// Continue to load rest of events in the first date
             if($i === 0) $this->args['offset'] = $this->offset;
 			// Load all events in the rest of dates
 			else $this->args['offset'] = 0;
-			
             // The Query
             $query = new WP_Query($this->args);
-            
+
             if($query->have_posts())
             {
                 // The Loop
                 while($query->have_posts())
                 {
                     $query->the_post();
-                    
+
                     if(!isset($events[$today])) $events[$today] = array();
-                    
+
                     $rendered = $this->render->data(get_the_ID());
-                    
+
                     $data = new stdClass();
                     $data->ID = get_the_ID();
                     $data->data = $rendered;
-                    
+
                     $data->date = array
                     (
                         'start'=>array('date'=>$today),
                         'end'=>array('date'=>$this->main->get_end_date($today, $rendered))
                     );
-                    
+
                     $events[$today][] = $data;
                     $found++;
-					
+
 					if($found >= $this->limit)
 					{
 						// Next Offset
                         $this->next_offset = ($query->post_count-($query->current_post+1)) > 0 ? ($query->current_post+1)+$this->offset : 0;
-						
+
 						// Move to next day
 						if($this->next_offset === 0)
                         {
                             if(isset($this->show_only_expired_events) and $this->show_only_expired_events) $this->end_date = date('Y-m-d', strtotime('-1 Days', strtotime($today)));
                             else $this->end_date = date('Y-m-d', strtotime('+1 Days', strtotime($today)));
                         }
-						
+
 						break;
 					}
                 }
             }
-            
+
             // Restore original Post Data
             wp_reset_postdata();
 
             $i++;
         }
-        
+
         // Set found events
         $this->found = $found;
-        
+
         return $events;
     }
-    
+
     /**
      * Run the search command
      * @author Webnus <info@webnus.biz>
@@ -595,7 +594,7 @@ class MEC_skins extends MEC_base
         // Events! :)
         return $this->events = $this->search();
     }
-    
+
     /**
      * Draw Monthly Calendar
      * @author Webnus <info@webnus.biz>
@@ -608,7 +607,7 @@ class MEC_skins extends MEC_base
     public function draw_monthly_calendar($year, $month, $events = array(), $style = 'calendar')
     {
         $calendar_path = $this->get_calendar_path($style);
-        
+
         // Generate Month
         ob_start();
         include $calendar_path;
@@ -636,7 +635,7 @@ class MEC_skins extends MEC_base
 
         return trim($classes);
     }
-    
+
     /**
      * Generates Search Form
      * @author Webnus <info@webnus.biz>
@@ -646,13 +645,14 @@ class MEC_skins extends MEC_base
     {
         // If no fields specified
         if(!count($this->sf_options)) return '';
-        
+
         $fields = $end_div = '';
         $first_row = 'not-started';
 
 	    $sortedOptions = array(
 		    'month_filter' => $this->sf_options['month_filter'],
 		    'location' => $this->sf_options['location'],
+		    'tag' => $this->sf_options['category'],
 		    'label' => $this->sf_options['label'],
 	    	'category' => $this->sf_options['category']
 	    );
@@ -660,29 +660,29 @@ class MEC_skins extends MEC_base
         foreach($sortedOptions as $field=>$options)
         {
             $type = isset($options['type']) ? $options['type'] : '';
-            
-            if(in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter')) and $first_row == 'not-started')
+
+            if(in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter', 'tag')) and $first_row == 'not-started')
             {
                 $first_row = 'started';
                 $fields .= '<div class="mec-dropdown-wrap">';
                 $end_div = '</div>';
             }
-            
-            if(!in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter')) and $first_row == 'started')
+
+            if(!in_array($field, array('category', 'location', 'organizer', 'label', 'month_filter', 'tag')) and $first_row == 'started')
             {
                 $first_row = 'finished';
                 $fields .= '</div>';
             }
-            
+
             $fields .= $this->sf_search_field($field, $options);
         }
-        
+
         $form = '';
         if(trim($fields)) $form .= '<div id="mec_search_form_'.$this->id.'" class="mec-search-form mec-totalcal-box">'.$fields.'</div>';
-        
+
         return $form;
     }
-    
+
     /**
      * Generate a certain search field
      * @author Webnus <info@webnus.biz>
@@ -693,19 +693,19 @@ class MEC_skins extends MEC_base
     public function sf_search_field($field, $options)
     {
         $type = isset($options['type']) ? $options['type'] : '';
-        
+
         // Field is disabled
         if(!trim($type)) return '';
-        
+
         $output = '';
-        
+
         if($field == 'category')
         {
             if($type == 'dropdown')
             {
                 $output .= '<div class="mec-dropdown-search">
                     <i class="mec-sl-folder"></i>';
-                
+
                 $output .= wp_dropdown_categories(array
                 (
                     'echo'=>false,
@@ -721,17 +721,43 @@ class MEC_skins extends MEC_base
                     'order'=>'ASC',
                     'show_count'=>0,
                 ));
-                
+
                 $output .= '</div>';
             }
         }
+	    else if($field == 'tag')
+	    {
+		    if($type == 'dropdown')
+		    {
+			    $output .= '<div class="mec-dropdown-search">
+                    <i class="mec-sl-globe"></i>';
+
+			    $output .= wp_dropdown_categories(array
+			    (
+				    'echo'=>false,
+				    'taxonomy'=>'post_tag',
+				    'name'=>'',
+				    'include'=>((isset($this->atts['tag']) and trim($this->atts['tag'])) ? $this->atts['tag'] : ''),
+				    'id'=>'mec_sf_tag_'.$this->id,
+				    'hierarchical'=>true,
+				    'show_option_none'=>$this->main->m('taxonomy_tag', __('Sejladstype', 'mec')),
+				    'option_none_value'=>'',
+				    'selected'=>(isset($this->atts['tag']) ? $this->atts['tag'] : ''),
+				    'orderby'=>'name',
+				    'order'=>'ASC',
+				    'show_count'=>0,
+			    ));
+
+			    $output .= '</div>';
+		    }
+	    }
         elseif($field == 'location')
         {
             if($type == 'dropdown')
             {
                 $output .= '<div class="mec-dropdown-search">
                     <i class="mec-sl-location-pin"></i>';
-                
+
                 $output .= wp_dropdown_categories(array
                 (
                     'echo'=>false,
@@ -747,7 +773,7 @@ class MEC_skins extends MEC_base
                     'order'=>'ASC',
                     'show_count'=>0,
                 ));
-                
+
                 $output .= '</div>';
             }
         }
@@ -757,7 +783,7 @@ class MEC_skins extends MEC_base
             {
                 $output .= '<div class="mec-dropdown-search">
                     <i class="mec-sl-user"></i>';
-                
+
                 $output .= wp_dropdown_categories(array
                 (
                     'echo'=>false,
@@ -773,7 +799,7 @@ class MEC_skins extends MEC_base
                     'order'=>'ASC',
                     'show_count'=>0,
                 ));
-                
+
                 $output .= '</div>';
             }
         }
@@ -783,7 +809,7 @@ class MEC_skins extends MEC_base
             {
                 $output .= '<div class="mec-dropdown-search">
                     <i class="mec-sl-tag"></i>';
-                
+
                 $output .= wp_dropdown_categories(array
                 (
                     'echo'=>false,
@@ -799,7 +825,7 @@ class MEC_skins extends MEC_base
                     'order'=>'ASC',
                     'show_count'=>0,
                 ));
-                
+
                 $output .= '</div>';
             }
         }
@@ -813,12 +839,12 @@ class MEC_skins extends MEC_base
                     <i class="mec-sl-calendar"></i>
                     <select id="mec_sf_month_'.$this->id.'">';
 
-                $output .= in_array($this->skin, array('list', 'grid')) ? '<option id="mec_sf_skip_date_'.$this->id.'" value="ignore_date">'.__('Ignore month and years', 'mec').'</option>' : '';
+                $output .= in_array($this->skin, array('list', 'grid')) ? '<option id="mec_sf_skip_date_'.$this->id.'" selected="selected" value="ignore_date">'.__('Ignore month and years', 'mec').'</option>' : '';
 
                 $m = date('m', $time);
                 $Y = date('Y', $time);
 
-                for($i = 1; $i <= 12; $i++) $output .= '<option value="'.($i < 10 ? '0'.$i : $i).'" '.($i == $m ? 'selected="selected"' : '').'>'.date_i18n('F', mktime(0, 0, 0, $i, 10)).'</option>';
+                for($i = 1; $i <= 12; $i++) $output .= '<option value="'.($i < 10 ? '0'.$i : $i).'" '.'>'.date_i18n('F', mktime(0, 0, 0, $i, 10)).'</option>';
                 $output .= '</select><select id="mec_sf_year_'.$this->id.'">';
 
                 $start_year = $min_start_year = $this->db->select("SELECT MIN(cast(meta_value as unsigned)) AS date FROM `#__postmeta` WHERE `meta_key`='mec_start_date'", 'loadResult');
@@ -841,7 +867,7 @@ class MEC_skins extends MEC_base
 
                 for($i = $start_year; $i <= $end_year; $i++)
                 {
-                    $output .= '<option value="'.$i.'" '.($i == $Y ? 'selected="selected"' : '').'>'.$i.'</option>';
+                    $output .= '<option value="'.$i.'">'.$i.'</option>';
                 }
 
                 $output .= '</select></div>';
@@ -860,7 +886,7 @@ class MEC_skins extends MEC_base
 
         return $output;
     }
-    
+
     public function sf_apply($atts, $sf = array(), $apply_sf_date = 1)
     {
         // Return normal atts if sf is empty
@@ -868,19 +894,25 @@ class MEC_skins extends MEC_base
 
         // Apply Text Search Query
         if(isset($sf['s'])) $atts['s'] = $sf['s'];
-        
+
         // Apply Category Query
         if(isset($sf['category']) and trim($sf['category'])) $atts['category'] = $sf['category'];
-        
+
+	    // Apply Tag Query
+	    if(isset($sf['tag']) and trim($sf['tag'])) {
+		   // $atts['tag'] = explode( ',', $sf['tag'] );
+		    $atts['tag'] = get_term_by('id', $sf['tag'], 'post_tag')->slug;
+	    }
+
         // Apply Location Query
         if(isset($sf['location']) and trim($sf['location'])) $atts['location'] = $sf['location'];
-        
+
         // Apply Organizer Query
         if(isset($sf['organizer']) and trim($sf['organizer'])) $atts['organizer'] = $sf['organizer'];
-        
+
         // Apply Label Query
         if(isset($sf['label']) and trim($sf['label'])) $atts['label'] = $sf['label'];
-        
+
         // Apply SF Date or Not
         if($apply_sf_date == 1)
         {
@@ -904,7 +936,7 @@ class MEC_skins extends MEC_base
                 }
             }
         }
-        
+
         return $atts;
     }
 }
