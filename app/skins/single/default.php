@@ -212,6 +212,21 @@ defined('MECEXEC') or die();
                     }
                 ?>
 
+				<?php
+				// Event author
+				?>
+				<div class="mec-single-event-location">
+					<h3 class="mec-events-single-section-title mec-organizer"><?php echo "skipper" ?></h3>
+					<div class="mec-single-event-organizer">
+						<a href="/skipper/<?php echo get_the_author_meta( 'user_login' ) ?>" class="mec-color-hover"
+						   rel="tag" style="outline: none;">
+							<div style="height: auto; width: 30px; display: inline-block; margin-right: 10px">
+								<?php echo get_avatar( get_the_author_meta( 'ID' ), 5 ) ?>
+							</div>
+							<?php echo get_the_author_meta( 'display_name' ) ?>
+						</a></div>
+				</div>
+
                 <!-- Register Booking Button -->
                 <?php if($this->main->can_show_booking_module($event)): ?>
                     <?php $data_lity = ''; if( isset($settings['single_booking_style']) and $settings['single_booking_style'] == 'modal' ) $data_lity = 'data-lity'; ?>
