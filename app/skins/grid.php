@@ -146,6 +146,7 @@ class MEC_skin_grid extends MEC_skins
 			$skipper = get_user_by('login', $skipperLogin);
 			if( $skipper ) {
 				$this->args['author'] = $skipper->ID;
+				$this->atts['author'] = $skipper->ID;
 			}
 		}
 
