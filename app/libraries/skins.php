@@ -725,32 +725,6 @@ class MEC_skins extends MEC_base
                 $output .= '</div>';
             }
         }
-	    else if($field == 'tag')
-	    {
-		    if($type == 'dropdown')
-		    {
-			    $output .= '<div class="mec-dropdown-search">
-                    <i class="mec-sl-globe"></i>';
-
-			    $output .= wp_dropdown_categories(array
-			    (
-				    'echo'=>false,
-				    'taxonomy'=>'post_tag',
-				    'name'=>'',
-				    'include'=>((isset($this->atts['tag']) and trim($this->atts['tag'])) ? $this->atts['tag'] : ''),
-				    'id'=>'mec_sf_tag_'.$this->id,
-				    'hierarchical'=>true,
-				    'show_option_none'=>$this->main->m('taxonomy_tag', __('Sejladstype', 'mec')),
-				    'option_none_value'=>'',
-				    'selected'=>(isset($this->atts['tag']) ? $this->atts['tag'] : ''),
-				    'orderby'=>'name',
-				    'order'=>'ASC',
-				    'show_count'=>0,
-			    ));
-
-			    $output .= '</div>';
-		    }
-	    }
         elseif($field == 'location')
         {
             if($type == 'dropdown')
