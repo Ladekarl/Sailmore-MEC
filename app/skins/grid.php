@@ -1,6 +1,7 @@
 <?php
+
 /** no direct access **/
-defined( 'MECEXEC' ) or die();
+defined('MECEXEC') or die();
 
 /**
  * Webnus MEC grid class.
@@ -39,8 +40,8 @@ class MEC_skin_grid extends MEC_skins
 	 */
 	public function actions()
 	{
-		$this->factory->action( 'wp_ajax_mec_grid_load_more', array( $this, 'load_more' ) );
-		$this->factory->action( 'wp_ajax_nopriv_mec_grid_load_more', array( $this, 'load_more' ) );
+		$this->factory->action('wp_ajax_mec_grid_load_more', array($this, 'load_more'));
+		$this->factory->action('wp_ajax_nopriv_mec_grid_load_more', array($this, 'load_more'));
 	}
 
 	/**
@@ -48,74 +49,74 @@ class MEC_skin_grid extends MEC_skins
 	 * @param array $atts
 	 * @author Webnus <info@webnus.biz>
 	 */
-	public function initialize( $atts )
+	public function initialize($atts)
 	{
 		$this->atts = $atts;
 
 		// Skin Options
-		$this->skin_options = ( isset( $this->atts['sk-options'] ) and isset( $this->atts['sk-options'][$this->skin] ) ) ? $this->atts['sk-options'][$this->skin] : array();
+		$this->skin_options = (isset($this->atts['sk-options']) and isset($this->atts['sk-options'][$this->skin])) ? $this->atts['sk-options'][$this->skin] : array();
 
 		// The style
-		$this->style = isset( $this->skin_options['style'] ) ? $this->skin_options['style'] : 'modern';
+		$this->style = isset($this->skin_options['style']) ? $this->skin_options['style'] : 'modern';
 
 		// Date Formats
-		$this->date_format_classic_1 = ( isset( $this->skin_options['classic_date_format1'] ) and trim( $this->skin_options['classic_date_format1'] ) ) ? $this->skin_options['classic_date_format1'] : 'd F Y';
+		$this->date_format_classic_1 = (isset($this->skin_options['classic_date_format1']) and trim($this->skin_options['classic_date_format1'])) ? $this->skin_options['classic_date_format1'] : 'd F Y';
 
-		$this->date_format_clean_1 = ( isset( $this->skin_options['clean_date_format1'] ) and trim( $this->skin_options['clean_date_format1'] ) ) ? $this->skin_options['clean_date_format1'] : 'd';
-		$this->date_format_clean_2 = ( isset( $this->skin_options['clean_date_format2'] ) and trim( $this->skin_options['clean_date_format2'] ) ) ? $this->skin_options['clean_date_format2'] : 'F';
+		$this->date_format_clean_1 = (isset($this->skin_options['clean_date_format1']) and trim($this->skin_options['clean_date_format1'])) ? $this->skin_options['clean_date_format1'] : 'd';
+		$this->date_format_clean_2 = (isset($this->skin_options['clean_date_format2']) and trim($this->skin_options['clean_date_format2'])) ? $this->skin_options['clean_date_format2'] : 'F';
 
-		$this->date_format_minimal_1 = ( isset( $this->skin_options['minimal_date_format1'] ) and trim( $this->skin_options['minimal_date_format1'] ) ) ? $this->skin_options['minimal_date_format1'] : 'd';
-		$this->date_format_minimal_2 = ( isset( $this->skin_options['minimal_date_format2'] ) and trim( $this->skin_options['minimal_date_format2'] ) ) ? $this->skin_options['minimal_date_format2'] : 'M';
+		$this->date_format_minimal_1 = (isset($this->skin_options['minimal_date_format1']) and trim($this->skin_options['minimal_date_format1'])) ? $this->skin_options['minimal_date_format1'] : 'd';
+		$this->date_format_minimal_2 = (isset($this->skin_options['minimal_date_format2']) and trim($this->skin_options['minimal_date_format2'])) ? $this->skin_options['minimal_date_format2'] : 'M';
 
-		$this->date_format_modern_1 = ( isset( $this->skin_options['modern_date_format1'] ) and trim( $this->skin_options['modern_date_format1'] ) ) ? $this->skin_options['modern_date_format1'] : 'd';
-		$this->date_format_modern_2 = ( isset( $this->skin_options['modern_date_format2'] ) and trim( $this->skin_options['modern_date_format2'] ) ) ? $this->skin_options['modern_date_format2'] : 'F';
-		$this->date_format_modern_3 = ( isset( $this->skin_options['modern_date_format3'] ) and trim( $this->skin_options['modern_date_format3'] ) ) ? $this->skin_options['modern_date_format3'] : 'l';
+		$this->date_format_modern_1 = (isset($this->skin_options['modern_date_format1']) and trim($this->skin_options['modern_date_format1'])) ? $this->skin_options['modern_date_format1'] : 'd';
+		$this->date_format_modern_2 = (isset($this->skin_options['modern_date_format2']) and trim($this->skin_options['modern_date_format2'])) ? $this->skin_options['modern_date_format2'] : 'F';
+		$this->date_format_modern_3 = (isset($this->skin_options['modern_date_format3']) and trim($this->skin_options['modern_date_format3'])) ? $this->skin_options['modern_date_format3'] : 'l';
 
-		$this->date_format_simple_1 = ( isset( $this->skin_options['simple_date_format1'] ) and trim( $this->skin_options['simple_date_format1'] ) ) ? $this->skin_options['simple_date_format1'] : 'M d Y';
+		$this->date_format_simple_1 = (isset($this->skin_options['simple_date_format1']) and trim($this->skin_options['simple_date_format1'])) ? $this->skin_options['simple_date_format1'] : 'M d Y';
 
-		$this->date_format_novel_1 = ( isset( $this->skin_options['novel_date_format1'] ) and trim( $this->skin_options['novel_date_format1'] ) ) ? $this->skin_options['novel_date_format1'] : 'd F Y';
+		$this->date_format_novel_1 = (isset($this->skin_options['novel_date_format1']) and trim($this->skin_options['novel_date_format1'])) ? $this->skin_options['novel_date_format1'] : 'd F Y';
 
 		// Date Formats of colorful style
-		if ( $this->style == 'colorful' ) {
-			$this->date_format_modern_1 = ( isset( $this->skin_options['colorful_date_format1'] ) and trim( $this->skin_options['colorful_date_format1'] ) ) ? $this->skin_options['colorful_date_format1'] : 'd';
-			$this->date_format_modern_2 = ( isset( $this->skin_options['colorful_date_format2'] ) and trim( $this->skin_options['colorful_date_format2'] ) ) ? $this->skin_options['colorful_date_format2'] : 'F';
-			$this->date_format_modern_3 = ( isset( $this->skin_options['colorful_date_format3'] ) and trim( $this->skin_options['colorful_date_format3'] ) ) ? $this->skin_options['colorful_date_format3'] : 'l';
+		if ($this->style == 'colorful') {
+			$this->date_format_modern_1 = (isset($this->skin_options['colorful_date_format1']) and trim($this->skin_options['colorful_date_format1'])) ? $this->skin_options['colorful_date_format1'] : 'd';
+			$this->date_format_modern_2 = (isset($this->skin_options['colorful_date_format2']) and trim($this->skin_options['colorful_date_format2'])) ? $this->skin_options['colorful_date_format2'] : 'F';
+			$this->date_format_modern_3 = (isset($this->skin_options['colorful_date_format3']) and trim($this->skin_options['colorful_date_format3'])) ? $this->skin_options['colorful_date_format3'] : 'l';
 		}
 
 		// Search Form Options
-		$this->sf_options = ( isset( $this->atts['sf-options'] ) and isset( $this->atts['sf-options'][$this->skin] ) ) ? $this->atts['sf-options'][$this->skin] : array();
+		$this->sf_options = (isset($this->atts['sf-options']) and isset($this->atts['sf-options'][$this->skin])) ? $this->atts['sf-options'][$this->skin] : array();
 
 		// Search Form Status
-		$this->sf_status = isset( $this->atts['sf_status'] ) ? $this->atts['sf_status'] : true;
+		$this->sf_status = isset($this->atts['sf_status']) ? $this->atts['sf_status'] : true;
 
 		// Generate an ID for the sking
-		$this->id = isset( $this->atts['id'] ) ? $this->atts['id'] : mt_rand( 100, 999 );
+		$this->id = isset($this->atts['id']) ? $this->atts['id'] : mt_rand(100, 999);
 
 		// Set the ID
-		if ( !isset( $this->atts['id'] ) ) $this->atts['id'] = $this->id;
+		if (!isset($this->atts['id'])) $this->atts['id'] = $this->id;
 
 		// Show "Load More" button or not
-		$this->load_more_button = isset( $this->skin_options['load_more_button'] ) ? $this->skin_options['load_more_button'] : true;
+		$this->load_more_button = isset($this->skin_options['load_more_button']) ? $this->skin_options['load_more_button'] : true;
 
 		// Override the style if the style forced by us in a widget etc
-		if ( isset( $this->atts['style'] ) and trim( $this->atts['style'] ) != '' ) $this->style = $this->atts['style'];
+		if (isset($this->atts['style']) and trim($this->atts['style']) != '') $this->style = $this->atts['style'];
 
 		// HTML class
 		$this->html_class = '';
-		if ( isset( $this->atts['html-class'] ) and trim( $this->atts['html-class'] ) != '' ) $this->html_class = $this->atts['html-class'];
+		if (isset($this->atts['html-class']) and trim($this->atts['html-class']) != '') $this->html_class = $this->atts['html-class'];
 
 		// SED Method
-		$this->sed_method = isset( $this->skin_options['sed_method'] ) ? $this->skin_options['sed_method'] : '0';
+		$this->sed_method = isset($this->skin_options['sed_method']) ? $this->skin_options['sed_method'] : '0';
 
 		// From Widget
-		$this->widget = ( isset( $this->atts['widget'] ) and trim( $this->atts['widget'] ) ) ? true : false;
-		if ( $this->widget ) {
+		$this->widget = (isset($this->atts['widget']) and trim($this->atts['widget'])) ? true : false;
+		if ($this->widget) {
 			$this->skin_options['count'] = '1';
 			$this->load_more_button = false;
 		}
 
 		// The count in row
-		$this->count = isset( $this->skin_options['count'] ) ? $this->skin_options['count'] : '3';
+		$this->count = isset($this->skin_options['count']) ? $this->skin_options['count'] : '3';
 
 		// Init MEC
 		$this->args['mec-init'] = true;
@@ -141,18 +142,18 @@ class MEC_skin_grid extends MEC_skins
 
 		// Author
 		$this->args['author'] = $this->author_query();
-		$skipperLogin = get_query_var( 'skipper', null );
-		if ( isset( $skipperLogin ) ) {
+		$skipperLogin = get_query_var('skipper', null);
+		if (isset($skipperLogin)) {
 			$skipper = get_user_by('login', $skipperLogin);
-			if( $skipper ) {
+			if ($skipper) {
 				$this->args['author'] = $skipper->ID;
 				$this->atts['author'] = $skipper->ID;
 			}
 		}
 
 		// Pagination Options
-		$this->paged = get_query_var( 'paged', 1 );
-		$this->limit = ( isset( $this->skin_options['limit'] ) and trim( $this->skin_options['limit'] ) ) ? $this->skin_options['limit'] : 12;
+		$this->paged = get_query_var('paged', 1);
+		$this->limit = (isset($this->skin_options['limit']) and trim($this->skin_options['limit'])) ? $this->skin_options['limit'] : 12;
 
 		$this->args['posts_per_page'] = $this->limit;
 		$this->args['paged'] = $this->paged;
@@ -163,22 +164,29 @@ class MEC_skin_grid extends MEC_skins
 		$this->args['meta_key'] = 'mec_start_day_seconds';
 
 		// Exclude Posts
-		if ( isset( $this->atts['exclude'] ) and is_array( $this->atts['exclude'] ) and count( $this->atts['exclude'] ) ) $this->args['post__not_in'] = $this->atts['exclude'];
+		if (isset($this->atts['exclude']) and is_array($this->atts['exclude']) and count($this->atts['exclude'])) $this->args['post__not_in'] = $this->atts['exclude'];
 
 		// Include Posts
-		if ( isset( $this->atts['include'] ) and is_array( $this->atts['include'] ) and count( $this->atts['include'] ) ) $this->args['post__in'] = $this->atts['include'];
+		if (isset($this->atts['include']) and is_array($this->atts['include']) and count($this->atts['include'])) $this->args['post__in'] = $this->atts['include'];
 
 		// Show Only Expired Events
-		$this->show_only_expired_events = ( isset( $this->atts['show_only_past_events'] ) and trim( $this->atts['show_only_past_events'] ) ) ? '1' : '0';
+		$this->show_only_expired_events = (isset($this->atts['show_only_past_events']) and trim($this->atts['show_only_past_events'])) ? '1' : '0';
 
 		// Show Past Events
-		if ( $this->show_only_expired_events ) {
+		if ($this->show_only_expired_events) {
 			$this->atts['show_past_events'] = '1';
 			$this->args['order'] = 'DESC';
 		}
 
 		// Show Past Events
-		$this->args['mec-past-events'] = isset( $this->atts['show_past_events'] ) ? $this->atts['show_past_events'] : '0';
+		$showPastEventsQueryVar = get_query_var('past', 0);
+		if (isset($showPastEventsQueryVar) && $showPastEventsQueryVar == '1') {
+			$this->args['show_past_events'] = $showPastEventsQueryVar;
+			$this->atts['show_past_events'] = $showPastEventsQueryVar;
+			$this->args['mec-past-events'] = $showPastEventsQueryVar;
+		} else {
+			$this->args['mec-past-events'] = '0';
+		}
 
 		// Start Date
 		$this->start_date = $this->get_start_date();
@@ -187,20 +195,20 @@ class MEC_skin_grid extends MEC_skins
 		$this->end_date = $this->start_date;
 
 		// Show Ongoing Events
-		$this->show_ongoing_events = ( isset( $this->atts['show_only_ongoing_events'] ) and trim( $this->atts['show_only_ongoing_events'] ) ) ? '1' : '0';
-		if ( $this->show_ongoing_events ) {
+		$this->show_ongoing_events = (isset($this->atts['show_only_ongoing_events']) and trim($this->atts['show_only_ongoing_events'])) ? '1' : '0';
+		if ($this->show_ongoing_events) {
 			$this->args['mec-show-ongoing-events'] = $this->show_ongoing_events;
 			$this->maximum_date = $this->start_date;
 		}
 
 		// Set start time
-		if ( isset( $this->atts['seconds'] ) ) {
+		if (isset($this->atts['seconds'])) {
 			$this->args['mec-seconds'] = $this->atts['seconds'];
-			$this->args['mec-seconds-date'] = isset( $this->atts['seconds_date'] ) ? $this->atts['seconds_date'] : $this->start_date;
+			$this->args['mec-seconds-date'] = isset($this->atts['seconds_date']) ? $this->atts['seconds_date'] : $this->start_date;
 		}
 
 		// Apply Maximum Date
-		if ( $this->request->getVar( 'apply_sf_date', 0 ) == 1 and isset( $this->sf ) and isset( $this->sf['month'] ) and trim( $this->sf['month'] ) ) $this->maximum_date = date( 'Y-m-t', strtotime( $this->start_date ) );
+		//if ($this->request->getVar('apply_sf_date', 0) == 1 and isset($this->sf) and isset($this->sf['month']) and trim($this->sf['month'])) $this->maximum_date = date('Y-m-t', strtotime($this->start_date));
 
 		// Maximum days for loop
 		$this->max_days_loop = 732; // 2 years
@@ -217,24 +225,24 @@ class MEC_skin_grid extends MEC_skins
 	public function get_start_date()
 	{
 		// Default date
-		$date = current_time( 'Y-m-d' );
+		$date = current_time('Y-m-d');
 
-		if ( isset( $this->skin_options['start_date_type'] ) and $this->skin_options['start_date_type'] == 'today' ) $date = current_time( 'Y-m-d' );
-		elseif ( isset( $this->skin_options['start_date_type'] ) and $this->skin_options['start_date_type'] == 'tomorrow' ) $date = date( 'Y-m-d', strtotime( 'Tomorrow' ) );
-		elseif ( isset( $this->skin_options['start_date_type'] ) and $this->skin_options['start_date_type'] == 'start_current_month' ) $date = date( 'Y-m-d', strtotime( 'first day of this month' ) );
-		elseif ( isset( $this->skin_options['start_date_type'] ) and $this->skin_options['start_date_type'] == 'start_next_month' ) $date = date( 'Y-m-d', strtotime( 'first day of next month' ) );
-		elseif ( isset( $this->skin_options['start_date_type'] ) and $this->skin_options['start_date_type'] == 'date' ) $date = date( 'Y-m-d', strtotime( $this->skin_options['start_date'] ) );
+		if (isset($this->skin_options['start_date_type']) and $this->skin_options['start_date_type'] == 'today') $date = current_time('Y-m-d');
+		elseif (isset($this->skin_options['start_date_type']) and $this->skin_options['start_date_type'] == 'tomorrow') $date = date('Y-m-d', strtotime('Tomorrow'));
+		elseif (isset($this->skin_options['start_date_type']) and $this->skin_options['start_date_type'] == 'start_current_month') $date = date('Y-m-d', strtotime('first day of this month'));
+		elseif (isset($this->skin_options['start_date_type']) and $this->skin_options['start_date_type'] == 'start_next_month') $date = date('Y-m-d', strtotime('first day of next month'));
+		elseif (isset($this->skin_options['start_date_type']) and $this->skin_options['start_date_type'] == 'date') $date = date('Y-m-d', strtotime($this->skin_options['start_date']));
 
 		// Hide past events
-		if ( isset( $this->atts['show_past_events'] ) and !trim( $this->atts['show_past_events'] ) ) {
-			$today = current_time( 'Y-m-d' );
-			if ( strtotime( $date ) < strtotime( $today ) ) $date = $today;
+		if (isset($this->atts['show_past_events']) and !trim($this->atts['show_past_events'])) {
+			$today = current_time('Y-m-d');
+			if (strtotime($date) < strtotime($today)) $date = $today;
 		}
 
 		// Show only expired events
-		if ( isset( $this->show_only_expired_events ) and $this->show_only_expired_events ) {
-			$yesterday = date( 'Y-m-d', strtotime( 'Yesterday' ) );
-			if ( strtotime( $date ) > strtotime( $yesterday ) ) $date = $yesterday;
+		if (isset($this->show_only_expired_events) and $this->show_only_expired_events) {
+			$yesterday = date('Y-m-d', strtotime('Yesterday'));
+			if (strtotime($date) > strtotime($yesterday)) $date = $yesterday;
 		}
 
 		return $date;
@@ -247,20 +255,20 @@ class MEC_skin_grid extends MEC_skins
 	 */
 	public function load_more()
 	{
-		$this->sf = $this->request->getVar( 'sf', array() );
-		$apply_sf_date = $this->request->getVar( 'apply_sf_date', 1 );
-		$atts = $this->sf_apply( $this->request->getVar( 'atts', array() ), $this->sf, $apply_sf_date );
+		$this->sf = $this->request->getVar('sf', array());
+		$apply_sf_date = $this->request->getVar('apply_sf_date', 1);
+		$atts = $this->sf_apply($this->request->getVar('atts', array()), $this->sf, $apply_sf_date);
 
 		// Initialize the skin
-		$this->initialize( $atts );
+		$this->initialize($atts);
 
 		// Override variables
-		$this->start_date = $this->request->getVar( 'mec_start_date', date( 'y-m-d' ) );
+		$this->start_date = $this->request->getVar('mec_start_date', date('y-m-d'));
 		$this->end_date = $this->start_date;
-		$this->offset = $this->request->getVar( 'mec_offset', 0 );
+		$this->offset = $this->request->getVar('mec_offset', 0);
 
 		// Apply Maximum Date
-		if ( $apply_sf_date == 1 and isset( $this->sf ) and isset( $this->sf['month'] ) and trim( $this->sf['month'] ) ) $this->maximum_date = date( 'Y-m-t', strtotime( $this->start_date ) );
+		if ($apply_sf_date == 1 and isset($this->sf) and isset($this->sf['month']) and trim($this->sf['month'])) $this->maximum_date = date('Y-m-t', strtotime($this->start_date));
 
 		// Return the events
 		$this->atts['return_items'] = true;
@@ -271,7 +279,7 @@ class MEC_skin_grid extends MEC_skins
 		// Return the output
 		$output = $this->output();
 
-		echo json_encode( $output );
+		echo json_encode($output);
 		exit;
 	}
 }
